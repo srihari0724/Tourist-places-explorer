@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places Explorer</title>
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('./images/IMG-20240509-WA0063.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select, ul {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: lightslategray;
+            color: white;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: lightseagreen;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: orange;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 200px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            padding-bottom: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Hari's Tourist Places Explorer</h1>
+        <select id="stateSelect">
+            <option value="">Select State</option>
+        </select>
+        <select id="districtSelect" disabled>
+            <option value="">Select District</option>
+        </select>
+        <select id="citySelect" disabled>
+            <option value="">Select City</option>
+        </select>
+        <ul id="placesList"></ul>
+    </div>
+
+    <footer>
+        © 2024 Hari's Travel Planner
+    </footer>
+
+    <script>
+        const data = {
+            "states": {
+                "Andhra Pradesh": {
+                    "districts": {
+                        "Anantapur": {
+    "cities": {
+        "Anantapur": [
+            { name: "Lepakshi", image: "./images/lepakshi.jpeg", description: "A famous historical site known for the Lepakshi Temple, showcasing stunning architecture and intricate carvings, including a unique hanging pillar." },
+            { name: "Puttaparthi", image: "./images/puttaparthi.jpg", description: "Renowned as the birthplace of Sri Sathya Sai Baba, featuring the Prasanthi Nilayam ashram, attracting devotees from around the world." }
+        ],
+        "Hindupur": [
+            { name: "Siddhavatam fort", image: "./images/siddhavatam.jpg", description: "A historic fort built during the 16th century, Siddavatam Fort is known for its impressive architecture and scenic views. It features ancient walls, temples, and a rich history related to the Vijayanagara Empire, making it a popular destination for history enthusiasts." },
+        ],
+        "Kalyandurg": [
+            { name: "Kalyanadurg Fort", image: "./images/kalyanadurgfort.jpg", description: "A historic fort offering panoramic views of the surrounding landscape, rich in history and architectural beauty." },
+            { name: "Anjanadri Hill", image: "./images/anjanadrihill.jpeg", description: "Known for the temple of Lord Hanuman, this hill is a popular pilgrimage site and offers breathtaking views." }
+        ],
+        "Guntakal": [
+            { name: "Guntakal Railway Station", image: "./images/guntakal.jpeg", description: "One of the oldest railway stations with historical significance, showcasing colonial-era architecture is now remodeled." },
+        ],
+        "Rayadurg": [
+            { name: "Rayadurg Fort", image: "./images/rayadurgfort.jpeg", description: "An ancient fort with a rich history, providing stunning views of the surrounding area." },
+        ]
+    }
+},
+                        "Chittoor": {
+                            "cities": {
+                                "Tirupati": [
+                                    { 
+                                        name: "Tirumala Venkateswara Temple", 
+                                        image: "./images/tptyy.jpg",
+                                        description: "One of the holiest and most visited temples in India, dedicated to Lord Venkateswara."
+                                    },
+                                    { 
+                                        name: "Sri Kapila theertham", 
+                                        image: "./images/kapila.jpeg",
+                                        description: "A serene temple and waterfalls located at the foot of Tirumala Hills."
+                                    },
+                                    { 
+                                        name: "Chandragiri Fort", 
+                                        image: "./images/chandragiri.jpg",
+                                        description: "A historic fort with a rich history dating back to the Vijayanagara Empire."
+                                    },
+                                    { 
+                                        name: "Talakona Waterfalls", 
+                                        image: "./images/talakona.jpg",
+                                        description: "A breathtaking waterfall in the dense forests of the Eastern Ghats, ideal for nature lovers."
+                                    },
+                                    { 
+                                        name: "Sri Kalyana Venkateswara Swamy Temple", 
+                                        image: "./images/kalyana.jpg",
+                                        description: "This temple is an important pilgrimage spot, believed to bless newlyweds with a prosperous marriage."
+                                    }
+                                ],
+                                "Sri Kalahasti": [
+                                    { 
+                                        name: "Sri Kalahasti Temple", 
+                                        image: "./images/kalahasthi.jpg",
+                                        description: "A famous temple known for its unique Vayu Linga, dedicated to Lord Shiva."
+                                    }
+                                ],
+                                "Horsley Hills": [
+                                    { 
+                                        name: "Horsley Hills", 
+                                        image: "./images/horseley.jpeg",
+                                        description: "A scenic hill station offering panoramic views and a refreshing escape from the heat."
+                                    }
+                                ]
+                            }
+                        },
+                        "East Godavari": {
+                            "cities": {
+                                "Rajahmundry": [
+                                    { 
+                                        name: "Godavari River", 
+                                        image: "./images/godavari.jpeg",
+                                        description: "Rajahmundry offers scenic views of the Godavari River, a significant part of Andhra Pradesh's culture."
+                                    },
+                                    { 
+                                        name: "Dowleswaram Barrage", 
+                                        image: "./images/dowaleswaram.jpg",
+                                        description: "A prominent irrigation structure that plays a vital role in the region's agriculture."
+                                    }
+                                ],
+                                "Kakinada": [
+                                    { 
+                                        name: "Kakinada Beach", 
+                                        image: "./images/kakinada.jpg",
+                                        description: "A serene beach on the Bay of Bengal, perfect for relaxing and enjoying the sea breeze."
+                                    },
+                                    { 
+                                        name: "Coringa Wildlife Sanctuary", 
+                                        image: "./images/coringa.jpg",
+                                        description: "A biodiversity hotspot known for its mangroves and a wide variety of bird species."
+                                    }
+                                ],
+                                "Peddaganjam": [
+                                    { 
+                                        name: "Draksharamam Temple", 
+                                        image: "./images/draksharamam.jpg",
+                                        description: "One of the five ancient Pancharama Kshetras, Draksharamam is a revered Shiva temple."
+                                    }
+                                ]
+                            }
+                        },
+                        "Guntur": {
+                            "cities": {
+                                "Amaravathi": [
+                                    { 
+                                        name: "Amaravati Stupa", 
+                                        image: "./images/amaravathi.jpeg",
+                                        description: "An ancient Buddhist site dating back to 2000 years, Amaravati is known for its stupa and relics."
+                                    }
+                                ],
+                                "Guntur": [
+                                    { 
+                                        name: "Gorantla Venkateswara Swamy Temple", 
+                                        image: "./images/gorantla.jpeg",
+                                        description: "A famous temple known for its architectural beauty and religious significance."
+                                    }
+                                ],
+                                "Mangalagiri": [
+                                    { 
+                                        name: "Panakala Swamy Temple", 
+                                        image: "./images/narasimha.jpeg",
+                                        description: "This unique temple is dedicated to Lord Narasimha and is famous for the Panakala prasadam."
+                                    }
+                                ],
+                                "Bapatla": [
+                                    { 
+                                        name: "Bapatla Beach", 
+                                        image: "./images/bapatla.jpg",
+                                        description: "A tranquil and less crowded beach, perfect for a peaceful getaway."
+                                    }
+                                ]
+                            }
+                        },
+                        "Krishna": {
+    "cities": {
+        "Vijayawada": [
+            { 
+                name: "Kanaka Durga Temple", 
+                image: "./images/indrakeeladri.jpg", 
+                description: "A famous temple dedicated to Goddess Kanaka Durga, located on the Indrakeeladri hill overlooking the Krishna River."
+            },
+            { 
+                name: "Prakasam Barrage", 
+                image: "./images/prakasam barrage.jpg", 
+                description: "A modern marvel, this barrage spans across the Krishna River, offering picturesque views of the river and the city."
+            },
+            { 
+                name: "Gandhi Hill", 
+                image: "./images/gandhihill.jpg", 
+                description: "A memorial dedicated to Mahatma Gandhi, offering panoramic views of Vijayawada city from the top."
+            }
+        ],
+        "Machilipatnam": [
+            { 
+                name: "Manginapudi Beach", 
+                image: "./images/manginipudibeach.jpeg", 
+                description: "A popular beach destination with scenic views, ideal for a relaxing day near the Bay of Bengal."
+            },
+            { 
+                name: "Machilipatnam Lighthouse", 
+                image: "./images/mtmlighthouse.jpeg", 
+                description: "An iconic structure offering insight into the maritime history of the region."
+            }
+        ]
+    }
+},
+                        "Kurnool": {
+                            "cities": {
+                                "Kurnool": [
+                                    { 
+                                        name: "Belum Caves", 
+                                        image: "./images/belum.jpeg",
+                                        description: "The second-largest cave system in India, famous for its stalactites and stalagmites."
+                                    },
+                                    { 
+                                        name: "Konda Reddy Fort", 
+                                        image: "./images/kondareddy.jpeg",
+                                        description: "A fort that stands as a testament to Kurnool’s rich history and heritage."
+                                    }
+                                ],
+                                "Ahobilam": [
+                                    { 
+                                        name: "Ahobilam Temple", 
+                                        image: "./images/ahobilam.jpeg",
+                                        description: "A renowned pilgrimage spot, famous for the Nava Narasimha temples located in the scenic Nallamala hills."
+                                    }
+                                ]
+                            }
+                        },
+                        "Visakhapatnam": {
+                            "cities": {
+                                "Visakhapatnam": [
+                                    { 
+                                        name: "Rama Krishna Beach", 
+                                        image: "./images/rkbeach.jpeg",
+                                        description: "A popular beach in Visakhapatnam, perfect for leisure walks and enjoying the sea."
+                                    },
+                                    { 
+                                        name: "Araku Valley", 
+                                        image: "./images/arakuvalley.jpeg",
+                                        description: "A scenic hill station known for its coffee plantations and tribal heritage."
+                                    },
+                                    { 
+                                        name: "Kailasagiri", 
+                                        image: "./images/kailasairi.jpg",
+                                        description: "A hilltop park offering panoramic views of the sea, with a large statue of Shiva and Parvati."
+                                    },
+                                    { 
+                                        name: "Simhachalam Temple", 
+                                        image: "./images/simhachalam.jpeg",
+                                        description: "A revered temple dedicated to Lord Narasimha, known for its ancient architecture."
+                                    }
+                                ]
+                            }
+                        },
+                        "Srikakulam": {
+                            "cities": {
+                                "Srikakulam": [
+                                    { 
+                                        name: "Srikurmam Temple", 
+                                        image: "./images/srikurmam.jpg",
+                                        description: "An ancient temple dedicated to Lord Kurma, believed to be the second incarnation of Lord Vishnu."
+                                    },
+                                    { 
+                                        name: "Borra Caves", 
+                                        image: "./images/borra.jpg",
+                                        description: "Famous for its limestone caves and stunning stalactites and stalagmites formations."
+                                    }
+                                ],
+                                "Amadalavalasa": [
+                                    { 
+                                        name: "Srikakulam Fort", 
+                                        image: "./images/srikakulam_fort.jpg",
+                                        description: "A historic fort that provides insights into the region's history and architecture."
+                                    }
+                                ]
+                            }
+                        },
+                        "YSR Kadapa": {
+    "cities": {
+        "Kadapa": [
+            { name: "Gandi Maiyya Temple", image: "./images/gandi_maiyya.jpg" },
+            { name: "Gandikota Fort", image: "./images/gandikota_fort.jpg" },
+            { name: "Mysore Palace", image: "./images/mysore_palace.jpg" },
+            { name: "Vontimitta", image: "./images/vontimitta.jpg" }
+        ],
+        "Proddatur": [
+            { name: "Proddatur Raghunatha Swamy Temple", image: "./images/proddatur_temple.jpg" },
+            { name: "Brahmamgari Matta", image: "./images/brahmamgari_matta.jpg" }
+        ],
+        "Jammalamadugu": [
+            { name: "Madhavaraya Temple", image: "./images/madhavaraya_temple.jpg" },
+            { name: "Karnool Dam", image: "./images/karnool_dam.jpg" }
+        ],
+        "Pulivendula": [
+            { name: "Pulivendula Fort", image: "./images/pulivendula_fort.jpg" },
+            { name: "Mallela Theertham", image: "./images/mallela_theertham.jpg" }
+        ],
+        "Rayachoti": [
+            { name: "Kumaraswamy Temple", image: "./images/kumaraswamy_temple.jpg" },
+            { name: "Rayachoti Fort", image: "./images/rayachoti_fort.jpg" }
+        ]
+    }
+},
+
+                        "Prakasam": {
+                            "cities": {
+                                "Ongole": [
+                                    { 
+                                        name: "Ongole Bull", 
+                                        image: "./images/ongole_bull.jpg",
+                                        description: "Known for the Ongole breed of bulls, it is a symbol of pride for the local agriculture."
+                                    },
+                                    { 
+                                        name: "Darsi", 
+                                        image: "./images/darsi.jpg",
+                                        description: "A popular town known for its temples and historical significance."
+                                    }
+                                ]
+                            }
+                        },
+                        "Nellore": {
+                            "cities": {
+                                "Nellore": [
+                                    { 
+                                        name: "Nellapattu Bird Sanctuary", 
+                                        image: "./images/nellapattu.jpg",
+                                        description: "A haven for bird watchers, this sanctuary is home to numerous migratory birds."
+                                    },
+                                    { 
+                                        name: "Sri Ranganathaswamy Temple", 
+                                        image: "./images/ranganathaswamy.jpg",
+                                        description: "An ancient temple dedicated to Lord Ranganatha, showcasing intricate architecture."
+                                    }
+                                ]
+                            }
+                        },
+                        "West Godavari": {
+                            "cities": {
+                                "Eluru": [
+                                    { 
+                                        name: "Kolleru Lake", 
+                                        image: "./images/kolleru.jpg",
+                                        description: "One of the largest freshwater lakes in India, famous for its rich biodiversity."
+                                    },
+                                    { 
+                                        name: "Vijayawada Kanak Durga Temple", 
+                                        image: "./images/kanak_durga.jpg",
+                                        description: "A revered temple dedicated to Goddess Durga, located in a scenic area."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Populate the state dropdown
+        const stateSelect = document.getElementById("stateSelect");
+        const districtSelect = document.getElementById("districtSelect");
+        const citySelect = document.getElementById("citySelect");
+        const placesList = document.getElementById("placesList");
+
+        function populateSelect(element, options) {
+            element.innerHTML = "";
+            element.disabled = false;
+            options.forEach(option => {
+                const opt = document.createElement("option");
+                opt.value = option;
+                opt.textContent = option;
+                element.appendChild(opt);
+            });
+        }
+
+        // Initialize the states dropdown
+        const states = Object.keys(data.states);
+        populateSelect(stateSelect, ["Select State", ...states]);
+
+        stateSelect.addEventListener("change", function () {
+            const selectedState = stateSelect.value;
+            if (selectedState !== "Select State") {
+                const districts = Object.keys(data.states[selectedState].districts);
+                populateSelect(districtSelect, ["Select District", ...districts]);
+                citySelect.innerHTML = "<option>Select City</option>";
+                citySelect.disabled = true;
+                placesList.innerHTML = ""; // Clear previous places
+            }
+        });
+
+        districtSelect.addEventListener("change", function () {
+            const selectedState = stateSelect.value;
+            const selectedDistrict = districtSelect.value;
+            if (selectedDistrict !== "Select District") {
+                const cities = Object.keys(data.states[selectedState].districts[selectedDistrict].cities);
+                populateSelect(citySelect, ["Select City", ...cities]);
+                placesList.innerHTML = ""; // Clear previous places
+            }
+        });
+
+        citySelect.addEventListener("change", function () {
+            const selectedState = stateSelect.value;
+            const selectedDistrict = districtSelect.value;
+            const selectedCity = citySelect.value;
+            if (selectedCity !== "Select City") {
+                const places = data.states[selectedState].districts[selectedDistrict].cities[selectedCity];
+                placesList.innerHTML = "";
+                places.forEach(place => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${place.name}</strong><br>
+                                    <img src="${place.image}" alt="${place.name}" loading="lazy"><br>
+                                    <p>${place.description}</p>`;
+                    placesList.appendChild(li);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

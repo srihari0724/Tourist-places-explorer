@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places Explorer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: lightblue; }
+        .container { max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); background-color: white; }
+        select, ul { width: 100%; margin-bottom: 20px; }
+        ul { list-style-type: none; padding: 0; }
+        li { background-color: skyblue; margin-bottom: 5px; padding: 10px; border-radius: 4px; }
+        footer { text-align: center; padding: 10px; background-color: #ddd; position: fixed; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hari's Tourist Guider</h1>
+        <select id="stateSelect"><option value="">Select State</option></select>
+        <select id="districtSelect" disabled><option value="">Select District</option></select>
+        <select id="citySelect" disabled><option value="">Select City</option></select>
+        <ul id="placesList"></ul>
+    </div>
+    <footer><p>&copy; 2024 Hari's Tourist Places Explorer. All rights reserved.</p></footer>
+    <script>
+        const data = {
+            "states": {
+                "Andhra Pradesh": {
+                    "districts": {
+                        "Anantapur": {
+                            "cities": {
+                                "Anantapur": ["Lepakshi", "Bhimeswara Temple", "Puttaparthi"],
+                                "Puttaparthi": ["Sai Baba Temple", "Chaitanya Jyoti Museum"],
+                                "Penukonda": ["Penukonda Fort"],
+                                "Gooty": ["Gooty Fort"]
+                            }
+                        },
+                        "Chittoor": {
+                            "cities": {
+                                "Tirupati": ["Tirumala Venkateswara Temple", "Sri Kapileswara Swamy Temple", "Chandragiri Fort", "Talakona Waterfalls", "Sri Kalyana Venkateswara Swamy Temple"],
+                                "Chandragiri": ["Chandragiri Fort"],
+                                "Sri Kalahasti": ["Sri Kalahasti Temple"],
+                                "Horsley Hills": ["Horsley Hills"],
+                                "Nagari": ["Nagari Hills"]
+                            }
+                        },
+                        "East Godavari": {
+                            "cities": {
+                                "Rajahmundry": ["Godavari River", "Dowleswaram Barrage", "Rajahmundry Temple"],
+                                "Kakinada": ["Kakinada Beach", "Coringa Wildlife Sanctuary", "Peddaganjam"],
+                                "Peddaganjam": ["Draksharamam Temple"],
+                                "Coringa": ["Coringa Wildlife Sanctuary"],
+                                "Draksharamam": ["Draksharamam Temple"]
+                            }
+                        },
+                        "Guntur": {
+                            "cities": {
+                                "Guntur": ["Amaravati Stupa", "Undavalli Caves", "Mangalagiri", "Piduguralla", "Bapatla"]
+                            }
+                        },
+                        "Krishna": {
+                            "cities": {
+                                "Vijayawada": ["Kanaka Durga Temple", "Prakasam Barrage", "Undavalli Caves", "Gandhi Hill"],
+                                "Mangalagiri": ["Mangalagiri Temple"]
+                            }
+                        },
+                        "Kurnool": {
+                            "cities": {
+                                "Kurnool": ["Belum Caves", "Konda Reddy Fort", "Papanasam", "Oravakallu Rock Garden", "Yaganti Temple"]
+                            }
+                        },
+                        "Nellore": {
+                            "cities": {
+                                "Nellore": ["Penchalakona", "Nelapattu Bird Sanctuary", "Jonnawada", "Mypadu Beach", "Udayagiri Fort"]
+                            }
+                        },
+                        "Prakasam": {
+                            "cities": {
+                                "Ongole": ["Kanigiri", "Chimakurthy", "Markapur", "Singarayakonda"]
+                            }
+                        },
+                        "Srikakulam": {
+                            "cities": {
+                                "Srikakulam": ["Arasavalli Sun Temple", "Baruva Beach", "Talapadma"],
+                                "Arasavalli": ["Arasavalli Sun Temple"],
+                                "Baruva": ["Baruva Beach"],
+                                "Tekkali": ["Tekkali"]
+                            }
+                        },
+                        "Visakhapatnam": {
+                            "cities": {
+                                "Visakhapatnam": ["Kailasagiri", "Ramakrishna Beach", "Submarine Museum", "Araku Valley", "Borra Caves"]
+                            }
+                        },
+                        "West Godavari": {
+                            "cities": {
+                                "Eluru": ["Eluru"],
+                                "Bhimavaram": ["Bhimavaram"],
+                                "Palacole": ["Palacole"],
+                                "Dwaraka Tirumala": ["Dwaraka Tirumala"],
+                                "Kolleru Lake": ["Kolleru Lake"]
+                            }
+                        },
+                        "Y.S.R. Kadapa": {
+                            "cities": {
+                                "Kadapa": ["Gandikota Fort", "Vontimitta"],
+                                "Gandikota": ["Gandikota Fort"],
+                                "Vontimitta": ["Vontimitta Temple"],
+                                "Belum Caves": ["Belum Caves"]
+                            }
+                        }
+                    }
+                },
+                "Telangana": {
+                    "districts": {
+                        "Adilabad": {
+                            "cities": {
+                                "Adilabad": ["Kuntala Waterfalls", "Kadem Dam"],
+                                "Nirmal": ["Pochera Falls", "Nirmal Fort"]
+                            }
+                        },
+                        "Bhadradri Kothagudem": {
+                            "cities": {
+                                "Bhadrachalam": ["Bhadrachalam Temple", "Sree Seetha Ramachandra Swamy Temple"],
+                                "Kothagudem": ["Papi Hills"]
+                            }
+                        },
+                        "Hyderabad": {
+                            "cities": {
+                                "Hyderabad": ["Charminar", "Hussain Sagar Lake", "Golconda Fort", "Ramoji Film City", "Salar Jung Museum", "Qutb Shahi Tombs"]
+                            }
+                        },
+                        "Jagtial": {
+                            "cities": {
+                                "Jagtial": ["Jagital Fort", "Kondagattu Hanuman Temple"],
+                                "Korutla": ["Ratapalli Temple"]
+                            }
+                        },
+                        "Jangaon": {
+                            "cities": {
+                                "Jangaon": ["Jangaon Fort", "Jaya Stambh"],
+                                "Bhongir": ["Bhongir Fort", "Lakshmi Narasimha Temple"]
+                            }
+                        },
+                        "Jayashankar Bhupalapally": {
+                            "cities": {
+                                "Jaya Shankar": ["Pochampad Dam"],
+                                "Bhupalapally": ["Kaleshwaram Temple", "Siddheshwar Temple", "Bhupalapally Lake"]
+                            }
+                        },
+                        "Jogulamba Gadwal": {
+                            "cities": {
+                                "Gadwal": ["Gadwal Fort", "Jogulamba Temple"]
+                            }
+                        },
+                        "Kamareddy": {
+                            "cities": {
+                                "Kamareddy": ["Bheemapalli Temple", "Kamareddy Fort"]
+                            }
+                        },
+                        "Karimnagar": {
+                            "cities": {
+                                "Karimnagar": ["Elgandal Fort", "Kaleshwaram Temple", "Pedda Cheruvu", "Shivaram Wildlife Sanctuary"]
+                            }
+                        },
+                        "Khammam": {
+                            "cities": {
+                                "Khammam": ["Khammam Fort", "Pallagutta Temple", "Sri Lakshmi Narasimha Swamy Temple"]
+                            }
+                        },
+                        "Mahabubnagar": {
+                            "cities": {
+                                "Mahabubnagar": ["Peddamma Temple", "Mallela Theertham", "Kulpakji Temple"]
+                            }
+                        },
+                        "Mancherial": {
+                            "cities": {
+                                "Mancherial": ["Mancherial Fort", "Siddheshwar Temple"]
+                            }
+                        },
+                        "Medak": {
+                            "cities": {
+                                "Medak": ["Medak Cathedral", "Medak Fort", "Pocharam Wildlife Sanctuary"]
+                            }
+                        },
+                        "Medchal-Malkajgiri": {
+                            "cities": {
+                                "Malkajgiri": ["Malkajgiri Fort", "Sri Lakshmi Narasimha Swamy Temple"]
+                            }
+                        },
+                        "Nalgonda": {
+                            "cities": {
+                                "Nalgonda": ["Nalgonda Fort", "Bhuvanagiri Fort", "Lepakshi"]
+                            }
+                        },
+                        "Nirmal": {
+                            "cities": {
+                                "Nirmal": ["Nirmal Fort", "Basar Saraswati Temple", "Kuntala Waterfalls", "Pochera Falls"]
+                            }
+                        },
+                        "Nizamabad": {
+                            "cities": {
+                                "Nizamabad": ["Nizamabad Fort", "Ali Sagar", "Ashok Sagar"]
+                            }
+                        },
+                        "Peddapalli": {
+                            "cities": {
+                                "Peddapalli": ["Gudem Satyanarayana Swamy Temple"]
+                            }
+                        },
+                        "Rajanna Sircilla": {
+                            "cities": {
+                                "Sircilla": ["Sircilla", "Vemulawada Temple"]
+                            }
+                        },
+                        "Rangareddy": {
+                            "cities": {
+                                "Rangareddy": ["Ananthagiri Hills", "Chilkur Balaji Temple", "Mrugavani National Park"]
+                            }
+                        },
+                        "Sangareddy": {
+                            "cities": {
+                                "Sangareddy": ["Medak Cathedral", "Medak Fort"]
+                            }
+                        },
+                        "Siddipet": {
+                            "cities": {
+                                "Siddipet": ["Siddipet", "Kondapochamma Reservoir"]
+                            }
+                        },
+                        "Suryapet": {
+                            "cities": {
+                                "Suryapet": ["Phanigiri Buddhist Site", "Chhaya Someshwaralayam"]
+                            }
+                        },
+                        "Vikarabad": {
+                            "cities": {
+                                "Vikarabad": ["Ananthagiri Hills", "Bugga Ramalingeswara Swamy Temple"]
+                            }
+                        },
+                        "Wanaparthy": {
+                            "cities": {
+                                "Wanaparthy": ["Wanaparthy Palace"]
+                            }
+                        },
+                        "Warangal Rural": {
+                            "cities": {
+                                "Warangal": ["Warangal Fort", "Ramappa Temple", "Bhadrakali Temple", "Thousand Pillar Temple"]
+                            }
+                        },
+                        "Warangal Urban": {
+                            "cities": {
+                                "Warangal": ["Warangal Fort", "Ramappa Temple", "Bhadrakali Temple", "Thousand Pillar Temple"]
+                            }
+                        },
+                        "Yadadri Bhuvanagiri": {
+                            "cities": {
+                                "Yadadri": ["Yadagirigutta Temple", "Bhongir Fort"]
+                            }
+                        }
+                    }
+                },
+                "Uttar Pradesh": {
+                    "districts": {
+                        "Agra": {
+                            "cities": {
+                                "Agra": ["Taj Mahal", "Agra Fort", "Fatehpur Sikri", "Mehtab Bagh", "Itimad-ud-Daulah's Tomb"]
+                            }
+                        },
+                        "Allahabad": {
+                            "cities": {
+                                "Allahabad": ["Triveni Sangam", "Allahabad Fort", "Anand Bhavan", "Khusro Bagh", "Allahabad Museum"]
+                            }
+                        },
+                        "Varanasi": {
+                            "cities": {
+                                "Varanasi": ["Kashi Vishwanath Temple", "Dashashwamedh Ghat", "Manikarnika Ghat", "Sarnath", "Banaras Hindu University"]
+                            }
+                        },
+                        "Lucknow": {
+                            "cities": {
+                                "Lucknow": ["Bara Imambara", "Chota Imambara", "Rumi Darwaza", "Ambedkar Memorial Park", "Lucknow Zoo"]
+                            }
+                        },
+                        "Kanpur": {
+                            "cities": {
+                                "Kanpur": ["JK Temple", "Allen Forest Zoo", "Moti Jheel", "Kanpur Memorial Church", "Nana Rao Park"]
+                            }
+                        },
+                        "Mathura": {
+                            "cities": {
+                                "Mathura": ["Krishna Janmasthan Temple", "Dwarkadhish Temple", "Vishram Ghat", "Govardhan Hill", "Kusum Sarovar"]
+                            }
+                        },
+                        "Meerut": {
+                            "cities": {
+                                "Meerut": ["Augarnath Temple", "St. John's Church", "Gandhi Bagh", "Mustafa Castle", "Shapir"]
+                            }
+                        },
+                        "Ghaziabad": {
+                            "cities": {
+                                "Ghaziabad": ["Swarn Jayanti Park", "City Forest", "ISKCON Temple", "Indirapuram Habitat Centre", "Lal Kuan"]
+                            }
+                        },
+                        "Noida": {
+                            "cities": {
+                                "Noida": ["The Great India Place", "Worlds of Wonder", "Okhla Bird Sanctuary", "Botanical Garden", "Stupa 18 Gallery"]
+                            }
+                        },
+                        "Gorakhpur": {
+                            "cities": {
+                                "Gorakhpur": ["Gorakhnath Temple", "Kushmi Forest", "Railway Museum", "Vishnu Temple", "Geeta Press"]
+                            }
+                        },
+                        "Saharanpur": {
+                            "cities": {
+                                "Saharanpur": ["Shakumbhari Devi Temple", "Company Garden", "Naugaja Peer", "Saharanpur Mandir", "Gandhi Park"]
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const stateSelect = document.getElementById('stateSelect');
+        const districtSelect = document.getElementById('districtSelect');
+        const citySelect = document.getElementById('citySelect');
+        const placesList = document.getElementById('placesList');
+
+        const populateOptions = (selectElement, options) => {
+            selectElement.innerHTML = '<option value="">Select</option>';
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = option;
+                selectElement.appendChild(opt);
+            });
+            selectElement.disabled = !options.length;
+        };
+
+        stateSelect.addEventListener('change', () => {
+            const state = stateSelect.value;
+            const districts = state ? Object.keys(data.states[state].districts) : [];
+            populateOptions(districtSelect, districts);
+            populateOptions(citySelect, []);
+            placesList.innerHTML = '';
+        });
+
+        districtSelect.addEventListener('change', () => {
+            const state = stateSelect.value;
+            const district = districtSelect.value;
+            const cities = district ? Object.keys(data.states[state].districts[district].cities) : [];
+            populateOptions(citySelect, cities);
+            placesList.innerHTML = '';
+        });
+
+        citySelect.addEventListener('change', () => {
+            const state = stateSelect.value;
+            const district = districtSelect.value;
+            const city = citySelect.value;
+            const places = city ? data.states[state].districts[district].cities[city] : [];
+            placesList.innerHTML = places.map(place => `<li>${place}</li>`).join('');
+        });
+
+        populateOptions(stateSelect, Object.keys(data.states));
+    </script>
+</body>
+</html>
